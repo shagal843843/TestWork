@@ -1,0 +1,59 @@
+1) select * from managers m 
+where m.phone is NOT NULL;
+
+2)SELECT count(*)
+  FROM sells s 
+  WHERE s."date"= '2023-06-20' (or s."date"= '20 июня');
+
+3)SELECT AVG(Sum)
+  FROM sells s 
+  JOIN products p 
+  ON s.id_product = p.id 
+  WHERE p."name" = 'Фанера';
+
+4) select m.fio, sum(s.sum) from sells s 
+   join managers m on s.id_manager = m.id 
+   join products p on s.id_product = p.id 
+   where p."name"  = 'ОСБ'
+   group by m.fio;
+
+5) select 
+   m.id as manager_id,
+   m.fio as manager_fio,
+   m.salary as manager_salary,
+   m.age as manager_age,
+   m.phone as manager_phone,
+   s.id as sell_id,
+   s.id_product as product_id,
+   s.count  as sell_count,
+   s.sum as sell_sum,
+   s."date" as sell_date from sells s 
+   join managers m on s.id_manager = m.id 
+   where s."date"= '2021-08-22';
+   
+      
+6) select * from  products p 
+   where  p."name" like '%Фанера%' and  p."cost" >=1750; -- можно ilike чтобы не учитывать регистр например ilike '%фанера%'
+  
+7) select p."name",s."date" from  sells s
+   join products p on s.id_product = p.id 
+   group by s."date",p."name" 
+   ORDER BY date_part('month',s."date") desc;
+  
+8.1) select 
+   duplicates.name, 
+   duplicates.total 
+   from 
+   (select p."name" as name ,count(*) as total from products p group by p."name" -- повторяющихся по имени
+   ) as duplicates
+   where duplicates.total > 1
+   
+8.2) with duplicates 
+     as (select p."name" as name ,count(*) as total from products p group by p."name") -- повторяющихся по имени
+     select 
+     duplicates.name, 
+   	 duplicates.total 
+   	 from duplicates
+   	 where duplicates.total > 1
+   
+   
